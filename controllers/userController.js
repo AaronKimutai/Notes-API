@@ -33,11 +33,38 @@ const loginUser = async(req, res, next)=>{
         if(!isPasswordCorrect){
             return res.status(400).json({message: "Invalid password. Please try again!"});
         }
-        const token = JWT.sign({userID: user._id}, process.env.JWT_SECRETKEY, {expiresIN: '1h'});
+        const token = JWT.sign({userID: user._id}, process.env.JWT_SECRETKEY, {expiresIn: '1h'});
         res.status(200).json({message: 'Login successful', token});
     } catch (error) {
         next(error);
     }
 }
 
-module.exports = {registerUser, loginUser};
+const getUsers = async(req, res, next)=>{
+    try {
+        const users = await User.find();
+        res.status(200).json(users);
+    } catch (error) {
+        next(error);
+    }
+}
+
+// get user
+const getUser = async(req, res, next)=>{
+    try {
+        const user = await User.findById(req.params.id);
+        if(!user){
+            return res.status(404).json({message: "User not found"});
+        }
+        res.status(200).json(user);
+    } catch (error) {
+        next(error);
+    }
+}
+
+module.exports = {
+    registerUser, 
+    loginUser, 
+    getUsers,
+    getUser
+};

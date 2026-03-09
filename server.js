@@ -15,7 +15,7 @@ app.use(morgan('dev'));
 app.use('/api/users', userRoutes);
 app.use('/api/notes', notesRoutes);
 app.get('/', (req, res)=>{
-    res.send('Server running');
+    res.send('Server is running');
 })
 
 app.use(errorHandler);

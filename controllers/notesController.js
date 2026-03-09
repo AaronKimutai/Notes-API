@@ -57,13 +57,12 @@ const updateNote = async(req, res, next)=>{
 // delete a note 
 const deleteNote = async(req, res, next)=>{
     try {
-        const userID = req.userID;
         const noteID = req.params.id;
-        const deletedNote = await Notes.findByIdAndDelete({
-            _id: noteID, userId: userID
+        const deletedNote = await Notes.findOneAndDelete({
+            _id: noteID, userId: req.userID
         });
         if(!deletedNote){
-            return res.status(400).json({message: 'The note does not exist'})
+            return res.status(404).json({message: 'The note does not exist'})
         }
         res.status(200).json({message: 'Note deleted successfully'});
     } catch (error) {
